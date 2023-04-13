@@ -1,0 +1,12 @@
+{
+  "manifest_version": 2,
+  "name": "Google Card Extension",
+  "version": "1.0",
+  "description": "Injects a card component in Google search page.",
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
