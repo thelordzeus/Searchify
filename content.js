@@ -8,12 +8,17 @@ const query = document.querySelector('input[name="q"]').value;
 const h1 = document.createElement('h1');
 h1.textContent = query;
 
-// Create the card element and append the h1 element to it
+// Create the title element
+const title = document.createElement('h2');
+title.textContent = 'Your searched question is:';
+
+// Create the card element and append the title and h1 elements to it
 const card = document.createElement('div');
 card.classList.add('card');
 card.style.border = '1px solid #ccc'; // add a border
 card.style.padding = '10px'; // add some padding
 card.style.marginBottom = '20px'; // add spacing
+card.appendChild(title);
 card.appendChild(h1);
 
 // Make a request to the ChatGPT API to get results for the search query
