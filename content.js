@@ -1,42 +1,47 @@
-// Find the search results container
-const results = document.querySelector('#search');
-
-// Get the search query from the search bar
+// Get the search query from the Google search page
 const query = document.querySelector('input[name="q"]').value;
 
-// Create the h1 element with the search query as its text content
-const h1 = document.createElement('h1');
-h1.textContent = query;
-
-// Create the title element
-const title = document.createElement('h2');
-title.textContent = 'Your searched question is:';
-
-// Create the card element and append the title and h1 elements to it
-const card = document.createElement('div');
-card.classList.add('card');
-card.style.border = '1px solid #ccc'; // add a border
-card.style.padding = '10px'; // add some padding
-card.style.marginBottom = '20px'; // add spacing
+// Create a card element to display the API results
+const card = document.createElement("div");
+card.classList.add("card");
+const title = document.createElement("h1");
+title.textContent = "Your searched question is: " + query;
 card.appendChild(title);
-card.appendChild(h1);
 
-// Make a request to the ChatGPT API to get results for the search query
-const url = `https://api.chatgpt.com/search?q=${encodeURIComponent(query)}`;
-fetch(url)
-  .then(response => response.json())
-  .then(data => {
+// Make a request to the OpenAI API to get results for the search query
+const apiKey = "your_openai_api_key_here";
+const url = "https://api.openai.com/v1/completions";
+const headers = {
+  "Content-Type": "application/json",
+  Authorization: `Bearer ${apiKey}`,
+};
+const data = JSON.stringify({
+  prompt: query,
+  temperature: 0.5,
+  max_tokens: 100,
+  top_p: 1,
+  frequency_penalty: 0,
+  presence_penalty: 0,
+});
+fetch(url, { method: "POST", headers: headers, body: data })
+  .then((response) => response.json())
+  .then((data) => {
     // Display the API results in the card element
-    const p = document.createElement('p');
-    p.textContent = data.result;
+    const p = document.createElement("p");
+    p.textContent = data.choices[0].text;
     card.appendChild(p);
-  })
-  .catch(error => {
-    console.error(error);
-    const p = document.createElement('p');
-    p.textContent = 'Error retrieving results from ChatGPT API.';
-    card.appendChild(p);
-  });
 
-// Insert the card element before the search results
-results.parentNode.insertBefore(card, results);
+    // Insert the card element at the top of the search page
+    const searchResults = document.querySelector("#search");
+    searchResults.insertBefore(card, searchResults.firstChild);
+  })
+  .catch((error) => {
+    console.error(error);
+    const p = document.createElement("p");
+    p.textContent = "Error retrieving results from OpenAI API.";
+    card.appendChild(p);
+
+    // Insert the card element at the top of the search page
+    const searchResults = document.querySelector("#search");
+    searchResults.insertBefore(card, searchResults.firstChild);
+  });
