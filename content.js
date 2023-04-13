@@ -4,6 +4,9 @@ const query = document.querySelector('input[name="q"]').value;
 // Create a card element to display the API results
 const card = document.createElement("div");
 card.classList.add("card");
+card.style.border = "1px solid #ddd";
+card.style.borderRadius = "4px";
+card.style.padding = "16px";
 const title = document.createElement("h1");
 title.textContent = "Your searched question is: " + query;
 card.appendChild(title);
